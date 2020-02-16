@@ -1,12 +1,12 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "debug.h"
 
-#include "Mario.h"
+#include "Simon.h"
 #include "Game.h"
 
 #include "Goomba.h"
 
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
@@ -20,7 +20,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	coEvents.clear();
 
 	// turn off collision when die 
-	if (state!=MARIO_STATE_DIE)
+	if (state!=SIMON_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
@@ -75,11 +75,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						{
 							if (level > MARIO_LEVEL_SMALL)
 							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
+								SetState(SIMON_STATE_DIE);
+								StartUntouchable(); //làm mờ sau khi hồi sinh
 							}
 							else 
-								SetState(MARIO_STATE_DIE);
+								SetState(SIMON_STATE_DIE);
 						}
 					}
 				}
@@ -91,34 +91,27 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
-void CMario::Render()
+void CSimon::Render()
 {
 	int ani;
-	if (state == MARIO_STATE_DIE)
-		ani = MARIO_ANI_DIE;
+	if (state == SIMON_STATE_DIE)
+		ani = SIMON_ANI_DIE;
 	else
-	if (level == MARIO_LEVEL_BIG)
+	//if (level == MARIO_LEVEL_BIG)
 	{
 		if (vx == 0)
 		{
-			if (nx>0) ani = MARIO_ANI_BIG_IDLE_RIGHT;
-			else ani = MARIO_ANI_BIG_IDLE_LEFT;
+			if (nx>0) ani = SIMON_ANI_IDLE_RIGHT;
+			else ani = SIMON_ANI_IDLE_LEFT;
+			if (attack > 1) ani = SIMON_ANI_ATTACK;
+			
 		}
 		else if (vx > 0) 
-			ani = MARIO_ANI_BIG_WALKING_RIGHT; 
-		else ani = MARIO_ANI_BIG_WALKING_LEFT;
+			ani = SIMON_ANI_WALKING_RIGHT;
+	
+		else ani = SIMON_ANI_WALKING_LEFT;
 	}
-	else if (level == MARIO_LEVEL_SMALL)
-	{
-		if (vx == 0)
-		{
-			if (nx>0) ani = MARIO_ANI_SMALL_IDLE_RIGHT;
-			else ani = MARIO_ANI_SMALL_IDLE_LEFT;
-		}
-		else if (vx > 0)
-			ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-		else ani = MARIO_ANI_SMALL_WALKING_LEFT;
-	}
+	
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
@@ -127,32 +120,36 @@ void CMario::Render()
 	RenderBoundingBox();
 }
 
-void CMario::SetState(int state)
+void CSimon::SetState(int state)
 {
 	CGameObject::SetState(state);
 
 	switch (state)
 	{
-	case MARIO_STATE_WALKING_RIGHT:
+	case SIMON_STATE_WALKING_RIGHT:
 		vx = MARIO_WALKING_SPEED;
 		nx = 1;
 		break;
-	case MARIO_STATE_WALKING_LEFT: 
+	case SIMON_STATE_WALKING_LEFT:
 		vx = -MARIO_WALKING_SPEED;
 		nx = -1;
 		break;
-	case MARIO_STATE_JUMP: 
+	case SIMON_STATE_JUMP:
 		vy = -MARIO_JUMP_SPEED_Y;
-	case MARIO_STATE_IDLE: 
+	case SIMON_STATE_IDLE:
 		vx = 0;
 		break;
-	case MARIO_STATE_DIE:
+	case SIMON_STATE_ATTACK:
+		vx = 0;
+		attack = 2;
+		break;
+	case SIMON_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
 		break;
 	}
 }
 
-void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void CSimon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	left = x;
 	top = y; 

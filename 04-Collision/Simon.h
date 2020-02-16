@@ -8,23 +8,25 @@
 #define MARIO_GRAVITY			0.002f
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
 
-#define MARIO_STATE_IDLE			0
-#define MARIO_STATE_WALKING_RIGHT	100
-#define MARIO_STATE_WALKING_LEFT	200
-#define MARIO_STATE_JUMP			300
-#define MARIO_STATE_DIE				400
+#define SIMON_STATE_IDLE			0
+#define SIMON_STATE_WALKING_RIGHT	100
+#define SIMON_STATE_WALKING_LEFT	200
+#define SIMON_STATE_JUMP			300
+#define SIMON_STATE_DIE				400
+#define SIMON_STATE_ATTACK			500
 
-#define MARIO_ANI_BIG_IDLE_RIGHT		0
-#define MARIO_ANI_BIG_IDLE_LEFT			1
-#define MARIO_ANI_SMALL_IDLE_RIGHT		2
-#define MARIO_ANI_SMALL_IDLE_LEFT			3
+#define SIMON_ANI_IDLE_RIGHT		0
+#define SIMON_ANI_IDLE_LEFT			1
+//#define SIMON_ANI_SMALL_IDLE_RIGHT		2
+//#define SIMON_ANI_SMALL_IDLE_LEFT			3
 
-#define MARIO_ANI_BIG_WALKING_RIGHT			4
-#define MARIO_ANI_BIG_WALKING_LEFT			5
-#define MARIO_ANI_SMALL_WALKING_RIGHT		6
-#define MARIO_ANI_SMALL_WALKING_LEFT		7
+#define SIMON_ANI_WALKING_RIGHT			4
+#define SIMON_ANI_WALKING_LEFT			5
+//#define SIMON_ANI_SMALL_WALKING_RIGHT		6
+//#define SIMON_ANI_SMALL_WALKING_LEFT		7
 
-#define MARIO_ANI_DIE				8
+#define SIMON_ANI_DIE				8
+#define SIMON_ANI_ATTACK			9
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -38,13 +40,13 @@
 #define MARIO_UNTOUCHABLE_TIME 5000
 
 
-class CMario : public CGameObject
+class CSimon : public CGameObject
 {
 	int level;
 	int untouchable;
 	DWORD untouchable_start;
 public: 
-	CMario() : CGameObject()
+	CSimon() : CGameObject()
 	{
 		level = MARIO_LEVEL_BIG;
 		untouchable = 0;

@@ -43,7 +43,8 @@ public:
 	float vx;
 	float vy;
 
-	int nx;	 
+	int nx;
+	int attack;
 
 	int state;
 

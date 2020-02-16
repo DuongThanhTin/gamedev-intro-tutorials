@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "debug.h"
 
-CSprite::CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
+CSprite::CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex, int isFlipImage, D3DXVECTOR2 position)
 {
 	this->id = id;
 	this->left = left;
@@ -10,6 +10,8 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEX
 	this->right = right;
 	this->bottom = bottom;
 	this->texture = tex;
+	this->isFlipImage = isFlipImage;
+	this->position = position;
 }
 
 CSprites * CSprites::__instance = NULL;
@@ -23,12 +25,12 @@ CSprites *CSprites::GetInstance()
 void CSprite::Draw(float x, float y, int alpha)
 {
 	CGame * game = CGame::GetInstance();
-	game->Draw(x, y, texture, left, top, right, bottom, alpha);
+	game->Draw(x + position.x, y + position.y, texture, left, top, right, bottom, alpha, isFlipImage);
 }
 
-void CSprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
+void CSprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex, int isFlipImage, D3DXVECTOR2 position )
 {
-	LPSPRITE s = new CSprite(id, left, top, right, bottom, tex);
+	LPSPRITE s = new CSprite(id, left, top, right, bottom, tex, isFlipImage,position);
 	sprites[id] = s;
 }
 
